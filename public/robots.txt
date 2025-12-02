@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://puneetkumar.vercel.app/sitemap.xml
+
