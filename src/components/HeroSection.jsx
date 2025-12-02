@@ -3,6 +3,7 @@ import Prism from "../components/Prism";
 function HeroSection() {
   return (
     <section
+      id="home"
       className="relative w-screen h-screen overflow-hidden bg-black"
       style={{ overscrollBehavior: "none" }}
     >
