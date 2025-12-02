@@ -304,12 +304,7 @@ export const StaggeredMenu = ({
     });
   }, []);
 
-  const toggleMenu = useCallback((e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    
+  const toggleMenu = useCallback(() => {
     const currentState = openRef.current;
     const target = !currentState;
     
@@ -356,19 +351,32 @@ export const StaggeredMenu = ({
   React.useEffect(() => {
     if (!closeOnClickAway || !open) return;
 
-    const handleClickOutside = event => {
+    // Use mousedown to close menu, but only for non-interactive background elements
+    // This allows buttons and links to work normally
+    const handleMouseDown = event => {
+      const target = event.target;
+      
       // Don't close if clicking on the toggle button
-      if (toggleBtnRef.current && toggleBtnRef.current.contains(event.target)) {
+      if (toggleBtnRef.current && toggleBtnRef.current.contains(target)) {
         return;
       }
-      if (panelRef.current && !panelRef.current.contains(event.target)) {
+      
+      // Don't close if clicking inside the menu panel
+      if (panelRef.current && panelRef.current.contains(target)) {
+        return;
+      }
+      
+      // Only close if clicking on non-interactive background elements
+      // This allows buttons, links, and other interactive elements to work normally
+      const isInteractive = target.closest('a, button, input, textarea, select, [role="button"]');
+      if (!isInteractive) {
         closeMenu();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', handleMouseDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('mousedown', handleMouseDown);
     };
   }, [closeOnClickAway, open, closeMenu]);
 
@@ -386,6 +394,7 @@ export const StaggeredMenu = ({
   return (
     <div
       className={`sm-scope z-40 ${isFixed ? 'fixed top-0 left-0 w-screen h-screen overflow-hidden' : 'w-full h-full'}`}
+      style={!open && isFixed ? { pointerEvents: 'none' } : {}}
     >
       <div
         className={(className ? className + ' ' : '') + 'staggered-menu-wrapper relative w-full h-full'}
@@ -425,11 +434,7 @@ export const StaggeredMenu = ({
             aria-label={open ? 'Close menu' : 'Open menu'}
             aria-expanded={open}
             aria-controls="staggered-menu-panel"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              toggleMenu(e);
-            }}
+            onClick={toggleMenu}
             type="button"
             style={{ zIndex: 100 }}
           >
