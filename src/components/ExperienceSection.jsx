@@ -27,7 +27,7 @@ const ExperienceSection = () => {
       <div className="w-full max-w-6xl px-4 sm:px-6 md:px-12 py-12 sm:py-16 md:py-20">
         <h1
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-8 sm:mb-12 md:mb-16 text-center text-white 
-          drop-shadow-[0_0_8px_rgba(59,130,246,0.3)]"
+          drop-shadow-[0_0_8px_rgba(168,85,247,0.3)]"
         >
           My Work Experience
         </h1>
@@ -49,10 +49,10 @@ const ExperienceSection = () => {
 
                 {/* Content Card with Glass Effect, Spotlight, and Electric Border */}
                 <ElectricBorder
-                  color="#60a5fa"
+                  color="#a855f7"
                   speed={0.4}
                   chaos={0.15}
-                  thickness={1}
+                  thickness={1.5}
                   style={{ borderRadius: 12 }}
                   className="flex-1"
                 >

@@ -28,10 +28,6 @@ const ElectricBorder = ({ children, color = '#5227FF', speed = 1, chaos = 1, thi
     const host = rootRef.current;
     if (!svg || !host) return;
 
-    if (strokeRef.current) {
-      strokeRef.current.style.filter = `url(#${filterId})`;
-    }
-
     const width = Math.max(1, Math.round(host.clientWidth || host.getBoundingClientRect().width || 0));
     const height = Math.max(1, Math.round(host.clientHeight || host.getBoundingClientRect().height || 0));
 
@@ -62,13 +58,19 @@ const ElectricBorder = ({ children, color = '#5227FF', speed = 1, chaos = 1, thi
       filterEl.setAttribute('height', '500%');
     }
 
+    // Apply filter to stroke element
+    if (strokeRef.current) {
+      strokeRef.current.style.filter = `url(#${filterId})`;
+    }
+
+    // Restart animations
     requestAnimationFrame(() => {
       [...dyAnims, ...dxAnims].forEach(a => {
         if (typeof a.beginElement === 'function') {
           try {
             a.beginElement();
-          } catch {
-            console.warn('ElectricBorder: beginElement failed');
+          } catch (e) {
+            // Silently fail - filter might not be supported
           }
         }
       });
@@ -76,15 +78,35 @@ const ElectricBorder = ({ children, color = '#5227FF', speed = 1, chaos = 1, thi
   };
 
   useEffect(() => {
-    updateAnim();
+    // Small delay to ensure SVG is in DOM
+    const timer = setTimeout(() => {
+      updateAnim();
+    }, 0);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speed, chaos]);
 
   useLayoutEffect(() => {
-    if (!rootRef.current) return;
-    const ro = new ResizeObserver(() => updateAnim());
+    if (!rootRef.current || !svgRef.current) return;
+    
+    // Ensure filter is applied immediately
+    if (strokeRef.current) {
+      strokeRef.current.style.filter = `url(#${filterId})`;
+    }
+    
+    const ro = new ResizeObserver(() => {
+      // Small delay to ensure DOM is ready
+      requestAnimationFrame(() => {
+        updateAnim();
+      });
+    });
     ro.observe(rootRef.current);
-    updateAnim();
+    
+    // Initial animation setup
+    requestAnimationFrame(() => {
+      updateAnim();
+    });
+    
     return () => ro.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -129,10 +151,17 @@ const ElectricBorder = ({ children, color = '#5227FF', speed = 1, chaos = 1, thi
 
   return (
     <div ref={rootRef} className={'relative isolate ' + (className ?? '')} style={style}>
+      {/* SVG Filter - positioned absolutely but visible to browser */}
       <svg
         ref={svgRef}
-        className="fixed -left-[10000px] -top-[10000px] w-[10px] h-[10px] opacity-[0.001] pointer-events-none"
-        aria-hidden
+        style={{
+          position: 'absolute',
+          width: 0,
+          height: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none'
+        }}
+        aria-hidden="true"
         focusable="false"
       >
         <defs>
@@ -172,10 +201,17 @@ const ElectricBorder = ({ children, color = '#5227FF', speed = 1, chaos = 1, thi
       </svg>
 
       <div className="absolute inset-0 pointer-events-none" style={inheritRadius}>
-        <div ref={strokeRef} className="absolute inset-0 box-border" style={strokeStyle} />
-        <div className="absolute inset-0 box-border" style={glow1Style} />
-        <div className="absolute inset-0 box-border" style={glow2Style} />
+        {/* Background glow */}
         <div className="absolute inset-0" style={bgGlowStyle} />
+        {/* Glow layers */}
+        <div className="absolute inset-0 box-border" style={glow2Style} />
+        <div className="absolute inset-0 box-border" style={glow1Style} />
+        {/* Main border with filter effect - this will be animated */}
+        <div 
+          ref={strokeRef} 
+          className="absolute inset-0 box-border" 
+          style={strokeStyle}
+        />
       </div>
 
       <div className="relative" style={inheritRadius}>
