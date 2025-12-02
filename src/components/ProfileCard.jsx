@@ -59,9 +59,9 @@ const ProfileCard = ({ name, title, image, bio }) => {
   ];
 
   return (
-    <div className="relative h-full">
+    <div className="relative w-full">
       <SpotlightCard
-        className="p-8 md:p-10 h-full flex flex-col"
+        className="p-6 sm:p-8 md:p-10 w-full min-h-[400px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[500px] flex flex-col"
         spotlightColor="rgba(255, 255, 255, 0.25)"
       >
         <Stepper steps={steps} interval={8000} />
