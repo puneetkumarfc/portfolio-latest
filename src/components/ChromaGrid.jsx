@@ -134,7 +134,7 @@ const ChromaGrid = ({ items, className = '', radius = 300, damping = 0.45, fadeO
           key={i}
           onMouseMove={handleCardMove}
           onClick={() => handleCardClick(c.url)}
-          className="group relative flex flex-col w-full max-w-[280px] sm:max-w-[300px] md:max-w-[calc(50%-12px)] lg:max-w-[300px] xl:max-w-[300px] rounded-[16px] sm:rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer mb-4 sm:mb-5 md:mb-6 flex-shrink-0"
+          className="group relative flex flex-col w-full max-w-[280px] sm:max-w-[300px] md:max-w-[calc(50%-12px)] lg:max-w-[300px] xl:max-w-[300px] h-[380px] sm:h-[400px] md:h-[420px] rounded-[16px] sm:rounded-[20px] overflow-hidden border-2 border-transparent transition-colors duration-300 cursor-pointer mb-4 sm:mb-5 md:mb-6 flex-shrink-0"
           style={{
             '--card-border': c.borderColor || 'transparent',
             background: c.gradient,
@@ -148,13 +148,13 @@ const ChromaGrid = ({ items, className = '', radius = 300, damping = 0.45, fadeO
                 'radial-gradient(circle at var(--mouse-x) var(--mouse-y), var(--spotlight-color), transparent 70%)'
             }}
           />
-          <div className="relative z-10 flex-1 p-[10px] box-border">
+          <div className="relative z-10 flex-1 p-[10px] box-border min-h-0">
             <img src={c.image} alt={c.title} loading="lazy" className="w-full h-full object-cover rounded-[10px]" />
           </div>
-          <footer className="relative z-10 p-2 sm:p-3 text-white font-sans grid grid-cols-[1fr_auto] gap-x-2 sm:gap-x-3 gap-y-1">
-            <h3 className="m-0 text-sm sm:text-[1.05rem] font-semibold">{c.title}</h3>
+          <footer className="relative z-10 p-2 sm:p-3 text-white font-sans grid grid-cols-[1fr_auto] gap-x-2 sm:gap-x-3 gap-y-1 flex-shrink-0">
+            <h3 className="m-0 text-sm sm:text-[1.05rem] font-semibold line-clamp-2">{c.title}</h3>
             {c.handle && <span className="text-xs sm:text-[0.95rem] opacity-80 text-right">{c.handle}</span>}
-            <p className="m-0 text-xs sm:text-[0.85rem] opacity-85">{c.subtitle}</p>
+            <p className="m-0 text-xs sm:text-[0.85rem] opacity-85 line-clamp-2">{c.subtitle}</p>
             {c.location && <span className="text-xs sm:text-[0.85rem] opacity-85 text-right">{c.location}</span>}
           </footer>
         </article>

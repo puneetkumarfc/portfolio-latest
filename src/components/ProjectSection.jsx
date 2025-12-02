@@ -39,7 +39,7 @@ const ProjectSection = () => {
     {
       image: "/pbot2.png",
       title: "Rag chat assistant: Chatbot",
-      subtitle: "Python, Gemini API, Streamlit, FAISS",
+      subtitle: "Python, Gemini API, Streamlit, Faiss",
       handle: "@puneetkumarfc",
       borderColor: "#b96410ff",
       gradient: "linear-gradient(180deg, #b96410ff, #000)",

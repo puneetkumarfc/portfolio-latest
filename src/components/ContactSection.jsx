@@ -232,7 +232,7 @@ const ContactSection = () => {
                   className={`w-full px-6 py-4 rounded-xl backdrop-blur-md bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 text-white font-semibold transition-all duration-300 shadow-lg relative overflow-hidden group ${
                     isSubmitting
                       ? "opacity-50 cursor-not-allowed"
-                      : "hover:from-blue-500/30 hover:to-purple-500/30 hover:border-blue-500/50 hover:shadow-blue-500/20"
+                      : "cursor-pointer hover:from-blue-500/30 hover:to-purple-500/30 hover:border-blue-500/50 hover:shadow-blue-500/20"
                   }`}
                 >
                   <span className="relative z-10">
